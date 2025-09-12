@@ -9,16 +9,16 @@
           <form action="/register" method="POST" id="registration-form">
             @csrf
             <div class="form-group">
-              <label for="username-register" class="text-muted mb-1"><small>Username</small></label>
-              <input value="{{old('username')}}" name="username" id="username-register" class="form-control" type="text" placeholder="Pick a username" autocomplete="off" />
-              @error('username')
+              <label for="name-register" class="text-muted mb-1"><small>Name</small></label>
+              <input value="{{old('name')}}" name="name" id="name-register" class="form-control" type="text" placeholder="Your name" autocomplete="off" />
+              @error('name')
               <p class="m-0 small alert alert-danger shadow-sm">{{$message}}</p>
               @enderror
             </div>
 
             <div class="form-group">
               <label for="email-register" class="text-muted mb-1"><small>Email</small></label>
-              <input value="{{old('email')}}" name="email" id="email-register" class="form-control" type="text" placeholder="you@example.com" autocomplete="off" />
+              <input value="{{old('email')}}" name="email" id="email-register" class="form-control" type="text" placeholder="Your email" autocomplete="off" />
               @error('email')
               <p class="m-0 small alert alert-danger shadow-sm">{{$message}}</p>
               @enderror
