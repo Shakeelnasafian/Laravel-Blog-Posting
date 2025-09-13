@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -13,12 +14,34 @@ use Illuminate\Support\Facades\Hash;
  */
 class CreateUserAction
 {
-    public function handle(array $data) : User
+    public function handle(array $data): User
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'username' => $this->generateUsername($data['name'], $data['email']),
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    private function generateUsername(string $name, string $email): string
+    {
+        // slugify the name → "John Doe" → "john-doe"
+        $base = Str::slug($name);
+
+        // if no slug (non-latin characters), fallback to email prefix
+        if (empty($base)) {
+            $base = Str::before($email, '@');
+        }
+
+        $username = $base;
+        $counter  = 1;
+
+        // ensure uniqueness
+        while (User::where('username', $username)->exists()) {
+            $username = $base . '-' . $counter++;
+        }
+
+        return $username;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\LoginAction;
+use App\Events\OurExampleEvent;
 use App\Actions\CreateUserAction;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -18,9 +19,8 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request, LoginAction $action)
     {
-        $credentials = $request->validated();
 
-        if ($action->handle($credentials, $request)) {
+        if ($action->handle($request)) {
             return redirect('/')->with('success', 'You have successfully logged in.');
         }
 
@@ -44,5 +44,12 @@ class AuthController extends Controller
 
         auth()->login($user);
         return redirect('/')->with('success', 'Thank you for creating an account.');
+    }
+
+    public function logout()
+    {
+        event(new OurExampleEvent(['username' => auth()->user()->username, 'action' => 'logout']));
+        auth()->logout();
+        return redirect('/')->with('success', 'You are now logged out.');
     }
 }
