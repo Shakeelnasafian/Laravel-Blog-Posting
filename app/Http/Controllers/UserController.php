@@ -80,12 +80,6 @@ class UserController extends Controller
         return response()->json(['theHTML' => view('profile-following-only', ['following' => $user->followingTheseUsers()->latest()->get()])->render(), 'docTitle' => 'Who ' . $user->username . " Follows"]);
     }
 
-    public function logout() {
-        event(new OurExampleEvent(['username' => auth()->user()->username, 'action' => 'logout']));
-        auth()->logout();
-        return redirect('/')->with('success', 'You are now logged out.');
-    }
-
     public function showCorrectHomepage() {
         if (auth()->check()) {
             return view('homepage-feed', ['posts' => auth()->user()->feedPosts()->latest()->paginate(4)]);
