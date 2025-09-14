@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
-    use Searchable;
+    // use Searchable;
     use HasFactory;
 
     protected $fillable = ['title', 'body', 'user_id'];
 
-    public function toSearchableArray() {
-        return [
-            'title' => $this->title,
-            'body' => $this->body
-        ];
-    }
+    // public function toSearchableArray() {
+    //     return [
+    //         'title' => $this->title,
+    //         'body' => $this->body
+    //     ];
+    // }
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
