@@ -21,7 +21,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -59,7 +59,10 @@ class PostPolicy
      */
     public function restore(User $user, Post $post): bool
     {
-        //
+        if ($user->isAdmin === 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
