@@ -3,34 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Follow;
-use Illuminate\Http\Request;
+use App\Actions\FollowUserAction;
+use App\Actions\UnfollowUserAction;
+use Illuminate\Validation\ValidationException;
 
 class FollowController extends Controller
 {
-    public function createFollow(User $user) {
-        // you cannot follow yourself
-        if ($user->id == auth()->user()->id) {
-            return back()->with('failure', 'You cannot follow yourself.');
+    /**
+     * Handles the creation of a follow relationship for the given user.
+     *
+     * @param  \App\Models\User  $user  The user to be followed.
+     * @param  \App\Actions\FollowUserAction  $followUserAction  The action class responsible for following a user.
+     * @return \Illuminate\Http\Response
+     */
+    public function createFollow(User $user, FollowUserAction $followUserAction)
+    {
+        try {
+            $followUserAction->handle($user);
+            return back()->with('success', 'User successfully followed.');
+        } catch (ValidationException $e) {
+            return back()->with('failure', $e->getMessage());
         }
-
-        // you cannot follow someone you're already following
-        $existCheck = Follow::where([['user_id', '=', auth()->user()->id], ['followeduser', '=', $user->id]])->count();
-
-        if ($existCheck) {
-            return back()->with('failure', 'You are already following that user.');
-        }
-
-        $newFollow = new Follow;
-        $newFollow->user_id = auth()->user()->id;
-        $newFollow->followeduser = $user->id;
-        $newFollow->save();
-
-        return back()->with('success', 'User successfully followed.');
     }
 
-    public function removeFollow(User $user) {
-        Follow::where([['user_id', '=', auth()->user()->id], ['followeduser', '=', $user->id]])->delete();
-        return back()->with('success', 'User succesfully unfollowed.');
+    /**
+     * Remove the follow relationship for the given user.
+     *
+     * @param  \App\Models\User  $user  The user to unfollow.
+     * @param  \App\Actions\UnfollowUserAction  $unfollowUserAction  The action class to handle unfollowing logic.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function removeFollow(User $user, UnfollowUserAction $unfollowUserAction)
+    {
+        try {
+            $unfollowUserAction->handle($user);
+            return back()->with('success', 'User successfully unfollowed.');
+        } catch (ValidationException $e) {
+            return back()->with('failure', $e->getMessage());
+        }
     }
 }

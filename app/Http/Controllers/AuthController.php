@@ -46,6 +46,14 @@ class AuthController extends Controller
         return redirect('/')->with('success', 'Thank you for creating an account.');
     }
 
+    /**
+     * Log the user out of the application.
+     *
+     * This method handles the user logout process, including invalidating the session
+     * and redirecting the user as appropriate.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout()
     {
         event(new OurExampleEvent(['username' => auth()->user()->username, 'action' => 'logout']));

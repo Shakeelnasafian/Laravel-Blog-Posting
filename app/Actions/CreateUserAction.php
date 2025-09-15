@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Hash;
  */
 class CreateUserAction
 {
+    /**
+     * Handles the creation of a new user with the provided data.
+     *
+     * @param array $data The data required to create a new user.
+     * @return User The newly created user instance.
+     */
     public function handle(array $data): User
     {
         return User::create([
@@ -24,6 +30,13 @@ class CreateUserAction
         ]);
     }
 
+    /**
+     * Generates a unique username based on the provided name and email address.
+     *
+     * @param string $name  The full name of the user.
+     * @param string $email The email address of the user.
+     * @return string       The generated username.
+     */
     private function generateUsername(string $name, string $email): string
     {
         // slugify the name → "John Doe" → "john-doe"
