@@ -13,6 +13,14 @@ use App\Http\Requests\LoginRequest;
  */
 class LoginAction
 {
+    /**
+     * Handles the login request.
+     *
+     * Processes the given LoginRequest and attempts to authenticate the user.
+     *
+     * @param LoginRequest $request The login request containing user credentials.
+     * @return bool Returns true if authentication is successful, false otherwise.
+     */
     public function handle(LoginRequest $request): bool
     {
         $credentials = $request->validated();
